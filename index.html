@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>A$TA Hub Panel</title>
+    <style>
+        :root {
+            --bg: #050505;
+            --panel-bg: #0f0a0a;
+            --border: #2a0a0a;
+            --text: #ffffff;
+            --text-dim: #8a7a7a;
+            --neon-red: #ff1a1a;
+            --neon-red-dim: #990000;
+            --neon-green: #39ff14;
+            --neon-purple: #8a2be2;
+        }
+
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 30px; 
+            background-image: radial-gradient(circle at top right, #200000, var(--bg) 40%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+        }
+        .header h2 { 
+            margin: 0; 
+            font-size: 28px; 
+            color: var(--neon-red); 
+            text-shadow: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 26, 26, 0.5);
+            letter-spacing: 2px;
+        }
+
+        /* Boxes */
+        .box { 
+            background: var(--panel-bg); 
+            border: 1px solid var(--border); 
+            border-radius: 8px;
+            padding: 20px; 
+            margin-bottom: 25px; 
+            box-shadow: 0 0 15px rgba(255, 26, 26, 0.05);
+            position: relative;
+        }
+        .box h3 {
+            margin-top: 0;
+            font-size: 14px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Inputs */
+        input, textarea { 
+            background: #000; 
+            color: var(--text); 
+            border: 1px solid #331111; 
+            padding: 12px; 
+            border-radius: 6px; 
+            outline: none; 
+            transition: all 0.3s;
+        }
+        input:focus, textarea:focus {
+            border-color: var(--neon-red);
+            box-shadow: 0 0 10px rgba(255, 26, 26, 0.3);
+        }
+
+        /* Buttons */
+        button { 
+            background: #1a1a1a; 
+            color: #fff; 
+            border: 1px solid #444; 
+            padding: 10px 18px; 
+            cursor: pointer; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        button:hover { 
+            transform: translateY(-2px);
+        }
+
+        /* Specific Button Colors */
+        button.danger { 
+            background: #330000; 
+            border-color: var(--neon-red-dim);
+            color: #ff9999;
+        }
+        button.danger:hover {
+            background: var(--neon-red);
+            color: #fff;
+            box-shadow: 0 0 15px var(--neon-red);
+        }
+
+        button.neon-purple {
+            background: #1a0b2e;
+            border-color: var(--neon-purple);
+            color: #c9a0ff;
+        }
+        button.neon-purple:hover {
+            background: var(--neon-purple);
+            color: #fff;
+            box-shadow: 0 0 15px var(--neon-purple);
+        }
+
+        button.success { 
+            background: #003300; 
+            border-color: #00aa00;
+            color: #aaffaa;
+        }
+        button.success:hover { 
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+
+        /* Layout for Broadcast */
+        .broadcast-btns { 
+            display: flex; 
+            gap: 10px; 
+            margin-top: 15px; 
+        }
+        .broadcast-btns button { flex: 1; }
+        .run-code { 
+            width: 100%; 
+            height: 80px; 
+            margin-top: 15px; 
+            font-family: 'Courier New', monospace; 
+            box-sizing: border-box;
+        }
+
+        /* Table */
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+        }
+        th { 
+            color: var(--text-dim); 
+            font-weight: 600; 
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+        }
+        th, td { 
+            text-align: left; 
+            padding: 12px; 
+            border-bottom: 1px solid #1a0a0a; 
+            font-size: 13px; 
+        }
+        tr:hover td {
+            background-color: rgba(255, 26, 26, 0.03);
+        }
+
+        /* Status */
+        .online { 
+            color: var(--neon-green); 
+            font-weight: bold; 
+            text-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
+        }
+        .offline { 
+            color: #661111; 
+        }
+
+        /* Action Buttons */
+        .action-btn { 
+            padding: 6px 12px; 
+            font-size: 11px; 
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        /* Generate Key text */
+        #generatedKey {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            text-shadow: 0 0 10px rgba(255, 26, 26, 0.8);
+            color: var(--neon-red);
+            margin-top: 15px;
+            word-break: break-all;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #331111; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-red); }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>⚡ A$TA Hub</h2>
+        <button class="neon-purple" onclick="loadUsers()">Refresh List</button>
+    </div>
+
+    <!-- BROADCAST SECTION -->
+    <div class="box">
+        <h3>BROADCAST TO ALL CLIENTS</h3>
+        <div class="broadcast-btns">
+            <button class="danger" onclick="sendGlobal('KICK')">Kick All</button>
+            <button class="neon-purple" onclick="sendGlobal('OFFLOAD')">Offload All</button>
+            <button class="success" onclick="sendGlobalCode()">Push Code to All</button>
+        </div>
+        <textarea id="globalCode" class="run-code" placeholder="Lua code to run on ALL clients..."></textarea>
+    </div>
+
+    <!-- GENERATE KEY SECTION -->
+    <div class="box">
+        <h3>GENERATE NEW KEY</h3>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="newNote" placeholder="Note (e.g. Test User)" style="flex: 1;">
+            <button class="success" onclick="generateKey()">Generate Key</button>
+        </div>
+        <p id="generatedKey"></p>
+    </div>
+
+    <!-- USER LIST SECTION -->
+    <div class="box">
+        <h3>ACTIVE USERS</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>KEY</th>
+                    <th>HWID</th>
+                    <th>STATUS</th>
+                    <th>LAST SEEN</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody id="userList">
+                <!-- Filled by JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // REPLACE THIS WITH YOUR RENDER URL
+        const API_URL = "https://YOUR-RENDER-URL.onrender.com";
+
+        async function loadUsers() {
+            try {
+                const res = await fetch(`${API_URL}/api/users`);
+                const users = await res.json();
+                const tbody = document.getElementById('userList');
+                tbody.innerHTML = '';
+
+                users.forEach(user => {
+                    const isOnline = user.status === 'ONLINE';
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td style="color:#ff9999; font-family:monospace;">${user.key}</td>
+                        <td style="color:#666;">${user.hwid || 'Not Locked'}</td>
+                        <td class="${isOnline ? 'online' : 'offline'}">${user.status}</td>
+                        <td style="color:#888;">${new Date(user.last_seen).toLocaleString()}</td>
+                        <td>
+                            <button class="danger action-btn" onclick="sendCommand('${user.hwid}', 'KICK')">Kick</button>
+                            <button class="neon-purple action-btn" onclick="sendCommand('${user.hwid}', 'OFFLOAD')">Offload</button>
+                            <button class="success action-btn" onclick="promptCode('${user.hwid}')">Run</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error("Failed to load users. Is Render asleep?", err);
+            }
+        }
+
+        async function generateKey() {
+            const note = document.getElementById('newNote').value;
+            const res = await fetch(`${API_URL}/api/generate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ note })
+            });
+            const data = await res.json();
+            document.getElementById('generatedKey').innerText = "> " + data.key;
+            loadUsers();
+        }
+
+        async function sendCommand(hwid, command, code = null) {
+            if (!hwid || hwid === 'Not Locked') return alert("User has no HWID yet.");
+            await fetch(`${API_URL}/api/command`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hwid, command, code })
+            });
+            alert(`Command ${command} sent!`);
+        }
+
+        async function sendGlobal(command) {
+            await fetch(`${API_URL}/api/command`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hwid: 'ALL', command })
+            });
+            alert(`Global ${command} sent!`);
+        }
+
+        async function sendGlobalCode() {
+            const code = document.getElementById('globalCode').value;
+            if (!code) return alert("Please enter code first.");
+            await fetch(`${API_URL}/api/command`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hwid: 'ALL', command: 'EXECUTE', code })
+            });
+            alert(`Global code pushed!`);
+        }
+
+        function promptCode(hwid) {
+            const code = prompt("Enter Lua code to run on this user:");
+            if (code) sendCommand(hwid, 'EXECUTE', code);
+        }
+
+        // Load on start
+        loadUsers();
+        // Auto refresh every 10s
+        setInterval(loadUsers, 10000);
+    </script>
+</body>
+</html>
